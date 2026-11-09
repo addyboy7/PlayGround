@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#101c2c" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%238dbb69' stroke='%23273c3e' stroke-width='3' d='M4 8 16 2l12 6v16l-12 6L4 24z'/%3E%3Cpath fill='%23a9d47b' d='m4 8 12-6 12 6-12 6z'/%3E%3C/svg%3E" />
+  <title>كتل البرية — عالمك بين يديك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <canvas id="game" aria-label="عالم لعبة كتل البرية"></canvas>
+    <div class="vignette"></div>
+
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="كتل البرية">
+        <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+        <span><b>كتل البرية</b><small>عالمك، قواعدك</small></span>
+      </a>
+      <div class="top-actions">
+        <div class="world-chip"><span class="live-dot"></span><span id="worldLabel">عالم جديد</span><span class="chip-divider"></span><span id="clockLabel">☀ 08:00</span></div>
+        <button class="icon-btn" id="soundBtn" aria-label="الصوت" title="الصوت">♪</button>
+        <button class="icon-btn" id="pauseBtn" aria-label="إيقاف مؤقت" title="إيقاف مؤقت">Ⅱ</button>
+      </div>
+    </header>
+
+    <section class="hud-left" aria-label="حالة اللاعب">
+      <div class="status-card">
+        <div class="status-title"><span>❤️</span><b>حالتك</b><span id="healthText">100%</span></div>
+        <div class="health-track"><i id="healthFill"></i></div>
+        <div class="status-meta"><span>✦ مستوى <b id="levelText">1</b></span><span>◈ <b id="xpText">0</b> / 20 XP</span></div>
+      </div>
+      <div class="objective-card"><span class="objective-icon">✧</span><div><small>مهمة اليوم</small><b id="objectiveText">اجمع 5 قطع خشب</b><div class="quest-progress"><i id="questFill"></i></div></div><span class="quest-count" id="questCount">0/5</span></div>
+    </section>
+
+    <div class="toast" id="toast" role="status"></div>
+    <div class="world-hint" id="worldHint"><span>⌖</span> <span id="hintText">اضغط على كتلة لتعدينها</span></div>
+
+    <div class="crosshair" id="crosshair"><span></span></div>
+
+    <section class="hotbar-wrap" aria-label="شريط الأدوات">
+      <div class="selected-info" id="selectedInfo"><span class="selected-dot"></span><span id="selectedName">تراب</span><small id="selectedCount">× 12</small></div>
+      <div class="hotbar" id="hotbar"></div>
+      <div class="hotbar-help"><span>اختر أداة</span><kbd>1</kbd>—<kbd>5</kbd><span>وضع كتلة</span><kbd>زر يمين</kbd></div>
+    </section>
+
+    <div class="mobile-controls" aria-label="أزرار التحكم باللمس">
+      <div class="move-pad"><button data-control="left" aria-label="يسار">‹</button><button data-control="right" aria-label="يمين">›</button></div>
+      <button class="jump-btn" data-control="jump" aria-label="قفز">↑<small>قفز</small></button>
+      <button class="mine-btn" data-control="mine" aria-label="تعدين">⛏<small>تعدين</small></button>
+      <button class="mine-btn place-btn" data-control="place" aria-label="بناء">▧<small>بناء</small></button>
+    </div>
+
+    <div class="screen-overlay" id="startScreen">
+      <div class="modal-card start-card">
+        <div class="eyebrow"><span></span> مغامرة صغيرة، عالم كبير</div>
+        <div class="hero-logo"><span class="hero-cube"><i></i></span><h1>كتل<br><em>البرية</em></h1></div>
+        <p class="hero-copy">ابنِ ملاذك، احفر أسرار الأرض،<br>واصنع حكايتك كتلةً بعد كتلة.</p>
+        <div class="feature-row"><span>⛏ تعدين</span><span>▧ بناء</span><span>☾ ليل ونهار</span></div>
+        <button class="primary-btn" id="playBtn">ابدأ المغامرة <span>←</span></button>
+        <p class="controls-note">W A S D أو الأسهم للحركة <b>·</b> مسافة للقفز <b>·</b> انقر للتعدين</p>
+      </div>
+      <div class="start-orbit orbit-one"></div><div class="start-orbit orbit-two"></div>
+    </div>
+
+    <div class="screen-overlay hidden" id="pauseScreen">
+      <div class="modal-card pause-card"><div class="pause-symbol">Ⅱ</div><div class="eyebrow">خذ نفساً</div><h2>المغامرة متوقفة</h2><p>عالمك ينتظرك.</p><button class="primary-btn" id="resumeBtn">تابع اللعب <span>←</span></button><button class="text-btn" id="restartBtn">ابدأ عالماً جديداً</button></div>
+    </div>
+
+    <div class="screen-overlay hidden" id="gameOverScreen">
+      <div class="modal-card pause-card"><div class="pause-symbol danger">✦</div><div class="eyebrow">لا بأس، أيها المستكشف</div><h2>حان وقت الراحة</h2><p>العالم ينتظرك من جديد.</p><button class="primary-btn" id="againBtn">حاول مرة أخرى <span>←</span></button></div>
+    </div>
+
+    <div class="bottom-tip"><span class="tip-spark">✦</span><span id="tipText">الخشب أساس كل بناء جيد</span><span class="tip-key">F</span></div>
+    <div class="coords" id="coords">X 0 · Y 0</div>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
